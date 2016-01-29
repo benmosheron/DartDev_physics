@@ -6,6 +6,5 @@
 /// This is an awesome library. More dartdocs go here.
 library physics;
 
-// TODO: Export any libraries intended for clients of this package.
-
-export 'src/physics_base.dart';
+export 'src/gravity_2d.dart';
+export 'src/gravity_object.dart';
