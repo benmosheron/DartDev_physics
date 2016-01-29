@@ -30,7 +30,6 @@ void main() {
       _expectTrue(gravity.entities is V<GravityObject>);
       _expectTrueForAllEntities(gravity, (e) => e.mass, expectedMasses);
       _expectTrueForAllEntities(gravity, (e) => e.position, expectedPositions);
-
     });
   });
 }
