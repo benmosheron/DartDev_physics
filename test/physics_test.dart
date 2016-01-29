@@ -22,14 +22,21 @@ void main() {
 
     test('Test Gravity2d setup', () {
       Gravity2d gravity = new Gravity2d(entities: three2dObjects);
+      V<double> expectedMasses = new V([1.0, 2.0, 3.0]);
+      V<V> expectedPositions = new V([new V([0.0, 0.0]), new V([10.0, 10.0]), new V([20.0, 20.0])]);
+
       _expectTrue(gravity.entities.length == 3);
       _expectTrue(gravity.g == 1.0);
       _expectTrue(gravity.entities is V<GravityObject>);
-      _expectTrue(gravity.entities[0].mass == 1.0);
-      _expectTrue(gravity.entities[1].mass == 2.0);
-      _expectTrue(gravity.entities[2].mass == 3.0);
+      _expectTrueForAllEntities(gravity, (e) => e.mass, expectedMasses);
+      _expectTrueForAllEntities(gravity, (e) => e.position, expectedPositions);
+
     });
   });
+}
+
+void _expectTrueForAllEntities(Gravity2d gravity, Function f, V expectedValues){
+  _expectTrue(gravity.entities.zip(expectedValues, (actual, expected) => f(actual) == expected).elements.every((e) => e));
 }
 
 void _expectTrue(bool b){
