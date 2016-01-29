@@ -16,10 +16,6 @@ void main() {
       new GravityObject2d(10.0, 10.0, 2.0),
       new GravityObject2d(20.0, 20.0, 3.0)]);
 
-    // setUp(() {
-    //   awesome = new Awesome();
-    // });
-
     test('Test Gravity2d setup', () {
       Gravity2d gravity = new Gravity2d(entities: three2dObjects);
       V<double> expectedMasses = new V([1.0, 2.0, 3.0]);
