@@ -12,8 +12,12 @@ void run(){
     ([new GravityObject2d(0.0, 0.0, 1.0),
       new GravityObject2d(10.0, 10.0, 2.0),
       new GravityObject2d(20.0, 20.0, 3.0)]);
-    V<double> two1s = new V<double>([1.0, 1.0]);
-    V<double> two0s = new V<double>([0.0, 0.0]);
+    V<GravityObject> twoSimple2dObjects = new V<GravityObject>
+      ([new GravityObject2d(0.0, 0.0, 1.0),
+        new GravityObject2d(1.0, 0.0, 1.0)]);
+    final V<double> two1s = new V<double>([1.0, 1.0]);
+    final V<double> two0s = new V<double>([0.0, 0.0]);
+    final V<double> oneZero = new V<double>([1.0, 0.0]);
 
     test('Test Gravity2d setup', () {
       Gravity2d gravity = new Gravity2d(entities: three2dObjects);
@@ -33,19 +37,19 @@ void run(){
         [1.0,2.0,3.0,  // m0*m0, m0*m1, m0*m2
          2.0,4.0,6.0,  // ...
          3.0,6.0,9.0]);// m2*m0, m2*m1, m2*m2
-      _expectTrue(gravity.massProductMatrix == expectedMasses);
+      _expectTrue(gravity.massProduct == expectedMasses);
     });
 
-    test('Test distanceMatrix', () {
+    test('Test distance', () {
       Gravity2d gravity = new Gravity2d(entities: three2dObjects);
       M expectedDistances = new M.fromArray(3,3, 
         [two0s,      two1s*10.0, two1s*20.0,  // p0->p0, p0->p1, p0->p2
          two1s*-10.0,two0s,      two1s*10.0,  // ...
          two1s*-20.0,two1s*-10.0,two0s]);     // p2->p0, p2->p1, p2->p2
-      _expectTrue(gravity.distanceMatrix == expectedDistances);
+      _expectTrue(gravity.distance == expectedDistances);
     });
 
-    test('Test directionMatrix', () {
+    test('Test direction', () {
       Gravity2d gravity = new Gravity2d(entities: three2dObjects);
       // Expected components are either 0 or ec, given that all positions are diagonal from each other
       double ec = 0.7071067811865475;
@@ -54,8 +58,44 @@ void run(){
         [two0s,           twoEcs,          twoEcs,  // p0->p0, p0->p1, p0->p2
          twoEcs.negate(), two0s,           twoEcs,  // ...
          twoEcs.negate(), twoEcs.negate(), two0s]);// p2->p0, p2->p1, p2->p2
-      _expectTrue(gravity.directionMatrix == expectedDirections);
+      _expectTrue(gravity.direction == expectedDirections);
     });
+
+    test('Test dealWithZeros', () {
+      Gravity2d gravity = new Gravity2d(entities: twoSimple2dObjects);
+      M expectedSafeDistances = new M.fromArray(2,2, 
+        [1.0,1.0,  
+         1.0,1.0,]);     
+      M safeDistances = gravity.dealWithZeros(gravity.distanceMagnitude);
+      _expectTrue(safeDistances == expectedSafeDistances);
+    });
+
+    test('Test distance^2   ', () {
+      Gravity2d gravity = new Gravity2d(entities: twoSimple2dObjects);
+      M dSquaredWithZeros = gravity.distanceMagnitude.elementWiseMultiply(gravity.distanceMagnitude);
+      M safeDistances = gravity.dealWithZeros(gravity.distanceMagnitude);
+      M dSquared = safeDistances.elementWiseMultiply(safeDistances);
+      // Just running without exception is enough for now
+      _expectTrue(dSquaredWithZeros is M);
+      _expectTrue(dSquared is M);
+    });
+
+    test('Test calulateForce 2 objects', () {
+      // Two objects with mass 1.0
+      // the second object is 1.0 units to the right
+      // default g = 1.0
+
+      Gravity2d gravity = new Gravity2d(entities: twoSimple2dObjects);
+      // Expect force from first to second = 1.0 to the right
+      // Expect force from second to first = -1.0 to the right
+      // All others should be 0
+
+      M expectedForce = new M.fromArray(2,2, 
+        [two0s,            oneZero,
+         oneZero.negate(), two0s]);
+      _expectTrue(gravity.calculateForce() == expectedForce);
+    });
+
   });
 }
 
