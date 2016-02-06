@@ -1,3 +1,5 @@
+library physics.test;
+
 import 'package:generic_vector_tools/generic_vector_tools.dart';
 import 'package:physics/physics.dart';
 
