@@ -34,6 +34,7 @@ class Gravity2d implements ForceCalculator{
   /// ForceCalculator implementation, sets internal list of entities and performs calculation
   /// If entities is null or empty, calculation will proceed using the internal list of entities.
   M calculateForce(V<GravityObject> entities) {
+    if(entities == null) throw new ArgumentError.notNull("entities");
     // Strength of gravitational force
     // F = G*M1*M2 / Distance^2
 

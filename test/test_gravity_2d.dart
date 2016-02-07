@@ -106,7 +106,12 @@ void run() {
       _expectTrue(gravity.calculateForce(new V<GravityObject>([
       new GravityObject2d(0.0, 0.0, 0.0),
       new GravityObject2d(1.0, 0.0, 1.0)
-    ])) == expectedForce);
+      ])) == expectedForce);
+    });
+
+    test('Test calulateForce throws on null', () {
+      Gravity2d gravity = new Gravity2d();
+      expect(() => gravity.calculateForce(null), throws);
     });
   });
 }
