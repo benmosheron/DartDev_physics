@@ -5,8 +5,7 @@ import 'package:generic_vector_tools/generic_vector_tools.dart';
 import 'gravity_object.dart';
 
 /// 2D gravity simulation
-class Gravity2d{
-
+class Gravity2d {
   /// Constant of gravitation.
   double g;
 
@@ -17,26 +16,28 @@ class Gravity2d{
   final zeroZero = new V<double>([0.0, 0.0]);
 
   /// Initialise gravity with a strength and a list of entities.
-  Gravity2d({double g: 1.0, V<GravityObject> entities}){
-    if(entities == null || entities.length < 1)
-      throw new Exception("Empty or null entity list");
+  Gravity2d({double g: 1.0, V<GravityObject> entities}) {
+    if (entities == null ||
+        entities.length < 1) throw new Exception("Empty or null entity list");
     this.g = 1.0;
     this.entities = entities;
   }
 
   /// Matrix of product of each entity's mass with every other entity's mass
-  M get massProduct => new M.fromV(entities.resolve(entities, (e1, e2) => e1.mass * e2.mass));
+  M get massProduct =>
+      new M.fromV(entities.resolve(entities, (e1, e2) => e1.mass * e2.mass));
 
   /// Matrix of vectors between positions of all entities
-  M get distance => new M.fromV(entities.resolve(entities, (e1, e2) => e2.position - e1.position));
+  M get distance => new M.fromV(
+      entities.resolve(entities, (e1, e2) => e2.position - e1.position));
 
   /// Matrix of magnitudes of vectors between positions of all entities
   M get distanceMagnitude => distance.mapF((e) => e.magnitude);
 
   /// Matrix of normalised vectors between positions of all entities
   M get direction => distance.mapF((e) => e.unit);
-  
-  M calculateForce(){
+
+  M calculateForce() {
     // Strength of gravitational force
     // F = G*M1*M2 / Distance^2
 
@@ -61,12 +62,12 @@ class Gravity2d{
 
   /// Deal with zeros in the distance matrix. Default behaviour will change from (0, 0) to (1, 1)
   /// Returns a new matrix.
-  M dealWithZeros(M distances){
+  M dealWithZeros(M distances) {
     return distances.mapF((e) => replaceZeroWithOne(e));
   }
 
-  double replaceZeroWithOne(double x){
-    if(x == 0.0) return 1.0;
+  double replaceZeroWithOne(double x) {
+    if (x == 0.0) return 1.0;
     return x;
   }
 }

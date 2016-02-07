@@ -8,5 +8,3 @@ import 'test_gravity_2d.dart' as test_gravity_2d;
 void main() {
   test_gravity_2d.run();
 }
-
-
