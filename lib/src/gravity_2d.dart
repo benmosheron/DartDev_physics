@@ -11,38 +11,28 @@ class Gravity2d implements ForceCalculator{
   /// Constant of gravitation.
   double g;
 
-  /// Vector of entities.
-  V<GravityObject> entities;
-
   /// Initialise gravity with a strength and a list of entities.
-  Gravity2d({double g: 1.0, V<GravityObject> entities}) {
-    if (entities == null ||
-        entities.length < 1) throw new Exception("Empty or null entity list");
+  Gravity2d({double g: 1.0}) {
     this.g = 1.0;
-    this.entities = entities;
   }
 
   /// Matrix of product of each entity's mass with every other entity's mass
-  M get massProduct =>
+  M calculateMassProduct(V<GravityObject> entities) =>
       new M.fromV(entities.resolve(entities, (e1, e2) => e1.mass * e2.mass));
 
   /// Matrix of vectors between positions of all entities
-  M get distance => new M.fromV(
+  M calculateDistance(V<GravityObject> entities) => new M.fromV(
       entities.resolve(entities, (e1, e2) => e2.position - e1.position));
 
   /// Matrix of magnitudes of vectors between positions of all entities
-  M get distanceMagnitude => distance.mapF((e) => e.magnitude);
+  M calculateDistanceMagnitude(V<GravityObject> entities) => calculateDistance(entities).mapF((e) => e.magnitude);
 
   /// Matrix of normalised vectors between positions of all entities
-  M get direction => distance.mapF((e) => e.unit);
+  M calculateDirection(V<GravityObject> entities) => calculateDistance(entities).mapF((e) => e.unit);
 
   /// ForceCalculator implementation, sets internal list of entities and performs calculation
-  M calculateForce(V<GravityObject> entities){
-    this.entities = entities;
-    return _calculateForce();
-  }
-
-  M _calculateForce() {
+  /// If entities is null or empty, calculation will proceed using the internal list of entities.
+  M calculateForce(V<GravityObject> entities) {
     // Strength of gravitational force
     // F = G*M1*M2 / Distance^2
 
@@ -52,15 +42,15 @@ class Gravity2d implements ForceCalculator{
     // Which acts along the directions in directionMatrix
 
     // We must deal with zero distances before dividing by them
-    M safeDistances = dealWithZeros(distanceMagnitude);
+    M safeDistances = dealWithZeros(calculateDistanceMagnitude(entities));
 
     M dSquared = safeDistances.elementWiseMultiply(safeDistances);
 
-    M F_magnitude = massProduct.elementWiseDivide(dSquared) * g;
+    M F_magnitude = calculateMassProduct(entities).elementWiseDivide(dSquared) * g;
 
     /// Zeros in the direction matrix will nullify any force introduced by
     /// removing zeros from distances
-    M F = direction.elementWiseMultiply(F_magnitude);
+    M F = calculateDirection(entities).elementWiseMultiply(F_magnitude);
 
     return F;
   }
