@@ -25,10 +25,11 @@ class Gravity2d implements ForceCalculator{
       entities.resolve(entities, (e1, e2) => e2.position - e1.position));
 
   /// Matrix of magnitudes of vectors between positions of all entities
-  M calculateDistanceMagnitude(V<GravityObject> entities) => calculateDistance(entities).mapF((e) => e.magnitude);
+  // M calculateDistanceMagnitude(V<GravityObject> entities) => calculateDistance(entities).mapF((e) => e.magnitude);
+  M calculateDistanceMagnitude(M distances) => distances.mapF((e) => e.magnitude);
 
   /// Matrix of normalised vectors between positions of all entities
-  M calculateDirection(V<GravityObject> entities) => calculateDistance(entities).mapF((e) => e.unit);
+  M calculateDirection(M distances) => distances.mapF((e) => e.unit);
 
   /// ForceCalculator implementation, sets internal list of entities and performs calculation
   /// If entities is null or empty, calculation will proceed using the internal list of entities.
@@ -40,9 +41,10 @@ class Gravity2d implements ForceCalculator{
     // Magnitude of force is given by:
     // (massProductMatrix / distanceMagnitudeMatrix^2) * g
     // Which acts along the directions in directionMatrix
+    M distances = calculateDistance(entities);
 
     // We must deal with zero distances before dividing by them
-    M safeDistances = dealWithZeros(calculateDistanceMagnitude(entities));
+    M safeDistances = dealWithZeros(calculateDistanceMagnitude(distances));
 
     M dSquared = safeDistances.elementWiseMultiply(safeDistances);
 
@@ -50,7 +52,7 @@ class Gravity2d implements ForceCalculator{
 
     /// Zeros in the direction matrix will nullify any force introduced by
     /// removing zeros from distances
-    M F = calculateDirection(entities).elementWiseMultiply(F_magnitude);
+    M F = calculateDirection(distances).elementWiseMultiply(F_magnitude);
 
     return F;
   }

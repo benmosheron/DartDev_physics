@@ -56,21 +56,21 @@ void run() {
         twoEcs.negate(), two0s, twoEcs, // ...
         twoEcs.negate(), twoEcs.negate(), two0s
       ]); // p2->p0, p2->p1, p2->p2
-      _expectTrue(gravity.calculateDirection(three2dObjects) == expectedDirections);
+      _expectTrue(gravity.calculateDirection(gravity.calculateDistance(three2dObjects)) == expectedDirections);
     });
 
     test('Test dealWithZeros', () {
       Gravity2d gravity = new Gravity2d();
       M expectedSafeDistances = new M.fromArray(2, 2, [1.0, 1.0, 1.0, 1.0,]);
-      M safeDistances = gravity.dealWithZeros(gravity.calculateDistanceMagnitude(twoSimple2dObjects));
+      M safeDistances = gravity.dealWithZeros(gravity.calculateDistanceMagnitude(gravity.calculateDistance(twoSimple2dObjects)));
       _expectTrue(safeDistances == expectedSafeDistances);
     });
 
     test('Test distance^2   ', () {
       Gravity2d gravity = new Gravity2d();
-      M dSquaredWithZeros = gravity.calculateDistanceMagnitude(twoSimple2dObjects)
-          .elementWiseMultiply(gravity.calculateDistanceMagnitude(twoSimple2dObjects));
-      M safeDistances = gravity.dealWithZeros(gravity.calculateDistanceMagnitude(twoSimple2dObjects));
+      M dSquaredWithZeros = gravity.calculateDistanceMagnitude(gravity.calculateDistance(twoSimple2dObjects))
+          .elementWiseMultiply(gravity.calculateDistanceMagnitude(gravity.calculateDistance(twoSimple2dObjects)));
+      M safeDistances = gravity.dealWithZeros(gravity.calculateDistanceMagnitude(gravity.calculateDistance(twoSimple2dObjects)));
       M dSquared = safeDistances.elementWiseMultiply(safeDistances);
       // Just running without exception is enough for now
       _expectTrue(dSquaredWithZeros is M);
