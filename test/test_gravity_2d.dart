@@ -1,4 +1,4 @@
-library physics.test;
+library physics.test_gravity_2d;
 
 import 'package:generic_vector_tools/generic_vector_tools.dart';
 import 'package:physics/physics.dart';

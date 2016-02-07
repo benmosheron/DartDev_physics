@@ -4,7 +4,9 @@
 library physics.test;
 
 import 'test_gravity_2d.dart' as test_gravity_2d;
+import 'test_integration.dart' as test_integration;
 
 void main() {
   test_gravity_2d.run();
+  test_integration.run();
 }
