@@ -8,12 +8,12 @@ import 'test_gravity_classes.dart';
 
 void run() {
   group('Gravity2d tests', () {
-    V<GravityObject> three2dObjects = new V<GravityObject>([
+    final V<GravityObject> three2dObjects = new V<GravityObject>([
       new GravityObject2d(0.0, 0.0, 1.0),
       new GravityObject2d(10.0, 10.0, 2.0),
       new GravityObject2d(20.0, 20.0, 3.0)
     ]);
-    V<GravityObject> twoSimple2dObjects = new V<GravityObject>([
+    final V<GravityObject> twoSimple2dObjects = new V<GravityObject>([
       new GravityObject2d(0.0, 0.0, 1.0),
       new GravityObject2d(1.0, 0.0, 1.0)
     ]);
