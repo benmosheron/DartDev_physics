@@ -100,7 +100,7 @@ void run() {
 
       M expectedForce =
           new M.fromArray(2, 2, [two0s, oneZero, oneZero.negate(), two0s]);
-      _expectTrue(gravity.calculateForce() == expectedForce);
+      _expectTrue(gravity.calculateForce(twoSimple2dObjects) == expectedForce);
     });
 
     test('Test calulateForce massless objects', () {
@@ -115,7 +115,7 @@ void run() {
       // All others should be 0
 
       M expectedForce = new M.fromArray(2, 2, [two0s, two0s, two0s, two0s]);
-      _expectTrue(gravity.calculateForce() == expectedForce);
+      _expectTrue(gravity.calculateForce(gravity.entities) == expectedForce);
     });
   });
 }

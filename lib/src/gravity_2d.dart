@@ -1,19 +1,18 @@
-//import 'dart:math';
+library physics.gravity_2d;
 
 import 'package:generic_vector_tools/generic_vector_tools.dart';
 
+import 'force_calculator.dart';
 import 'gravity_object.dart';
 
-/// 2D gravity simulation
-class Gravity2d {
+
+/// 2D gravity simulation (note: nothing limits this to 2d)
+class Gravity2d implements ForceCalculator{
   /// Constant of gravitation.
   double g;
 
   /// Vector of entities.
   V<GravityObject> entities;
-
-  /// (0, 0)
-  final zeroZero = new V<double>([0.0, 0.0]);
 
   /// Initialise gravity with a strength and a list of entities.
   Gravity2d({double g: 1.0, V<GravityObject> entities}) {
@@ -37,7 +36,13 @@ class Gravity2d {
   /// Matrix of normalised vectors between positions of all entities
   M get direction => distance.mapF((e) => e.unit);
 
-  M calculateForce() {
+  /// ForceCalculator implementation, sets internal list of entities and performs calculation
+  M calculateForce(V<GravityObject> entities){
+    this.entities = entities;
+    return _calculateForce();
+  }
+
+  M _calculateForce() {
     // Strength of gravitational force
     // F = G*M1*M2 / Distance^2
 

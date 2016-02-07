@@ -8,3 +8,4 @@ library physics;
 
 export 'src/gravity_2d.dart';
 export 'src/gravity_object.dart';
+export 'src/integration.dart';
