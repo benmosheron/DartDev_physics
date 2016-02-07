@@ -6,4 +6,10 @@ import 'package:generic_vector_tools/generic_vector_tools.dart';
 abstract class ForceObject {
   /// Position of object
   V<double> position;
+
+  /// Velocity of object
+  V<double> velocity;
+
+  /// Acceleration of object
+  V<double> acceleration;
 }

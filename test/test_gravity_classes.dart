@@ -7,6 +7,8 @@ import 'package:physics/physics.dart';
 class GravityObject2d implements GravityObject {
   double mass;
   V<double> position = new V.zero(2);
+  V<double> velocity = new V.zero(2);
+  V<double> acceleration = new V.zero(2);
 
   double get x => position[0];
   double get y => position[1];

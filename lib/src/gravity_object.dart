@@ -11,4 +11,10 @@ abstract class GravityObject implements ForceObject{
 
   /// Position of object
   V<double> position;
+
+  /// Velocity of object
+  V<double> velocity;
+
+  /// Acceleration of object
+  V<double> acceleration;
 }
