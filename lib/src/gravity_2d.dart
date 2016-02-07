@@ -69,9 +69,4 @@ class Gravity2d{
     if(x == 0.0) return 1.0;
     return x;
   }
-
-  V replaceZeroWithOneV(V v){
-    if(v == zeroZero) return new V<double>([1.0, 1.0]);
-    return v;
-  }
 }

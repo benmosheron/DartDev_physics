@@ -96,6 +96,23 @@ void run(){
       _expectTrue(gravity.calculateForce() == expectedForce);
     });
 
+    test('Test calulateForce massless objects', () {
+      // Two objects with mass 1.0
+      // the second object is 1.0 units to the right
+      // default g = 1.0
+
+      Gravity2d gravity = new Gravity2d(entities: twoSimple2dObjects);
+      gravity.entities[0].mass = 0.0;
+      // Expect force from first to second = 1.0 to the right
+      // Expect force from second to first = -1.0 to the right
+      // All others should be 0
+
+      M expectedForce = new M.fromArray(2,2, 
+        [two0s, two0s,
+         two0s, two0s]);
+      _expectTrue(gravity.calculateForce() == expectedForce);
+    });
+
   });
 }
 
